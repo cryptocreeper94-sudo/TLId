@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TLID — Premium Blockchain Domain Registry | Trust Layer</title>
+  <meta name="description" content="Claim your .tlid blockchain domain. Lifetime ownership, no renewal fees. Undercuts ENS and Unstoppable Domains. Part of the Trust Layer ecosystem.">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --void:#030712;--void-deep:#0a0f1e;--glass:rgba(12,18,36,.55);
+      --border:rgba(255,255,255,.06);--border-hover:rgba(0,255,212,.15);
+      --accent:#00ffd4;--accent-dim:#00b4d8;--accent-glow:rgba(0,255,212,.08);
+      --purple:#8a5cf6;--purple-glow:rgba(138,92,246,.1);
+      --text:#f0f4f8;--text-dim:rgba(255,255,255,.55);--text-muted:rgba(255,255,255,.25);
+      --radius:16px;--radius-sm:12px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--void);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+    /* ─── CANVAS ─── */
+    .bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:orb-drift 20s ease-in-out infinite alternate}
+    .orb-1{width:600px;height:600px;background:var(--accent);top:-200px;left:-100px;animation-duration:25s}
+    .orb-2{width:500px;height:500px;background:var(--purple);bottom:-150px;right:-100px;animation-duration:30s;animation-delay:5s}
+    .orb-3{width:400px;height:400px;background:var(--accent-dim);top:40%;left:60%;animation-duration:22s;animation-delay:10s}
+    @keyframes orb-drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-40px) scale(1.1)}100%{transform:translate(-30px,50px) scale(.95)}}
+
+    /* ─── LAYOUT ─── */
+    .mx{max-width:1200px;margin:0 auto;padding:0 24px}
+    .section{padding:80px 0;position:relative;z-index:1}
+    .glass{background:var(--glass);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:var(--radius);transition:all .3s}
+    .glass:hover{border-color:var(--border-hover);box-shadow:0 0 30px var(--accent-glow)}
+    .grad-text{background:linear-gradient(135deg,#f0f9ff,var(--accent),#f0f9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);margin:0 auto;max-width:800px}
+
+    /* ─── NAV ─── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(3,7,18,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 0}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo{font-size:22px;font-weight:900;letter-spacing:-.03em}
+    .nav-badge{font-size:8px;padding:3px 10px;border-radius:999px;border:1px solid rgba(0,255,212,.2);color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+    .nav-links{display:flex;align-items:center;gap:20px}
+    .nav-links a{font-size:12px;color:var(--text-dim);text-decoration:none;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--accent)}
+    .nav-cta{padding:8px 20px;border-radius:var(--radius-sm);background:var(--accent-glow);border:1px solid rgba(0,255,212,.2);color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none}
+    .nav-cta:hover{background:rgba(0,255,212,.15)}
+
+    /* ─── HERO ─── */
+    .hero{padding:160px 0 80px;text-align:center}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:999px;background:linear-gradient(135deg,rgba(0,255,212,.08),rgba(138,92,246,.08));border:1px solid rgba(0,255,212,.15);font-size:12px;font-weight:600;color:var(--accent);margin-bottom:24px}
+    .hero h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.1;margin-bottom:16px}
+    .hero p{font-size:1.1rem;color:var(--text-dim);max-width:600px;margin:0 auto 40px;line-height:1.7}
+
+    /* ─── SEARCH BAR ─── */
+    .search-wrap{max-width:620px;margin:0 auto;position:relative}
+    .search-bar{display:flex;align-items:center;background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 8px 6px 24px;transition:all .3s}
+    .search-bar:focus-within{border-color:rgba(0,255,212,.3);box-shadow:0 0 40px var(--accent-glow)}
+    .search-bar input{flex:1;background:none;border:none;outline:none;color:#fff;font-size:18px;font-family:inherit;font-weight:500;padding:12px 0}
+    .search-bar input::placeholder{color:rgba(255,255,255,.2)}
+    .search-tld{padding:6px 14px;border-radius:10px;background:rgba(0,255,212,.08);border:1px solid rgba(0,255,212,.15);color:var(--accent);font-size:13px;font-weight:700;margin-right:8px;font-family:'JetBrains Mono',monospace}
+    .search-btn{padding:12px 28px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:var(--void);font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;font-family:inherit}
+    .search-btn:hover{transform:translateY(-1px);box-shadow:0 0 24px rgba(0,255,212,.3)}
+    .search-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+    /* ─── RESULT CARD ─── */
+    .result{max-width:620px;margin:20px auto 0;display:none}
+    .result.show{display:block;animation:fade-up .4s ease}
+    .result-avail{padding:24px;border-color:rgba(16,185,129,.3)}
+    .result-taken{padding:24px;border-color:rgba(239,68,68,.3)}
+    .result-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .result-name{font-size:1.4rem;font-weight:800}
+    .result-status{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+    .result-status.avail{background:rgba(16,185,129,.12);color:#6ee7b7;border:1px solid rgba(16,185,129,.2)}
+    .result-status.taken{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+    .result-prices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+    .result-price-card{padding:16px;border-radius:var(--radius-sm);background:rgba(255,255,255,.03);border:1px solid var(--border);text-align:center}
+    .result-price-card.highlight{background:linear-gradient(135deg,rgba(0,255,212,.05),rgba(138,92,246,.05));border-color:rgba(0,255,212,.15)}
+    .result-price-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-weight:600}
+    .result-price-val{font-size:1.5rem;font-weight:900}
+    .result-tier{font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:12px}
+    .result-register{width:100%;padding:14px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;font-family:inherit}
+    .result-register:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,255,212,.2)}
+
+    /* ─── STATS ─── */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:700px;margin:0 auto}
+    .stat-card{padding:28px;text-align:center}
+    .stat-val{font-size:2rem;font-weight:900;display:block;margin-bottom:4px}
+    .stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600}
+
+    /* ─── PRICING ─── */
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .pricing-card{padding:28px;text-align:center;position:relative;overflow:hidden}
+    .pricing-card.featured{border-color:rgba(0,255,212,.2);box-shadow:0 0 40px var(--accent-glow)}
+    .pricing-badge{display:inline-block;padding:4px 14px;border-radius:999px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+    .pricing-badge.reserved{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.15)}
+    .pricing-badge.ultra{background:linear-gradient(135deg,rgba(138,92,246,.15),rgba(0,255,212,.1));color:var(--accent);border:1px solid rgba(138,92,246,.2)}
+    .pricing-badge.premium{background:rgba(138,92,246,.1);color:#c4b5fd;border:1px solid rgba(138,92,246,.15)}
+    .pricing-badge.standard{background:rgba(0,180,216,.1);color:var(--accent-dim);border:1px solid rgba(0,180,216,.15)}
+    .pricing-badge.economy{background:rgba(16,185,129,.08);color:#6ee7b7;border:1px solid rgba(16,185,129,.15)}
+    .pricing-chars{font-size:14px;font-weight:700;color:var(--text-dim);margin-bottom:12px}
+    .pricing-yearly{font-size:1.8rem;font-weight:900;margin-bottom:4px}
+    .pricing-lifetime{font-size:13px;color:var(--accent);font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px}
+    .pricing-compare{font-size:10px;color:var(--text-muted);margin-top:12px;line-height:1.6}
+    .pricing-compare s{color:rgba(239,68,68,.5)}
+
+    /* ─── FEATURES ─── */
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .feat-card{padding:32px 24px}
+    .feat-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+    .feat-card h3{font-size:1rem;font-weight:800;margin-bottom:8px}
+    .feat-card p{font-size:13px;color:var(--text-dim);line-height:1.7}
+
+    /* ─── ECOSYSTEM ─── */
+    .eco-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .eco-card{padding:20px;text-align:center;cursor:pointer}
+    .eco-card:hover{transform:translateY(-2px)}
+    .eco-icon{font-size:28px;margin-bottom:8px;display:block}
+    .eco-name{font-size:12px;font-weight:700;margin-bottom:2px}
+    .eco-desc{font-size:10px;color:var(--text-muted)}
+
+    /* ─── CTA ─── */
+    .cta-section{text-align:center;padding:100px 0}
+    .cta-section h2{font-size:2.2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:12px}
+    .cta-section p{color:var(--text-dim);max-width:500px;margin:0 auto 32px;line-height:1.7}
+    .cta-btn{padding:16px 40px;border-radius:var(--radius);border:none;font-size:16px;font-weight:800;cursor:pointer;transition:all .3s;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+    .cta-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:var(--void)}
+    .cta-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(0,255,212,.25)}
+
+    /* ─── FOOTER ─── */
+    footer{border-top:1px solid var(--border);padding:40px 0 32px}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+    .footer-brand{font-size:18px;font-weight:900;margin-bottom:8px}
+    .footer-desc{font-size:11px;color:var(--text-muted);line-height:1.7;margin-bottom:16px}
+    .footer-heading{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px}
+    .footer-link{display:block;font-size:12px;color:var(--text-dim);text-decoration:none;margin-bottom:8px;transition:color .2s}
+    .footer-link:hover{color:var(--accent)}
+    .footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .footer-copy{font-size:10px;color:var(--text-muted)}
+    .footer-badges{display:flex;align-items:center;gap:12px}
+    .footer-badges a{font-size:9px;color:rgba(0,255,212,.3);text-decoration:none;transition:color .2s}
+    .footer-badges a:hover{color:var(--accent)}
+
+    /* ─── SECTION HEADERS ─── */
+    .section-head{text-align:center;margin-bottom:48px}
+    .section-head h2{font-size:2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:8px}
+    .section-head p{color:var(--text-dim);font-size:14px;max-width:500px;margin:0 auto}
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fade-up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .reveal{opacity:0;transform:translateY(20px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:900px){
+      .pricing-grid{grid-template-columns:1fr 1fr}
+      .feat-grid{grid-template-columns:1fr 1fr}
+      .eco-grid{grid-template-columns:repeat(2,1fr)}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      .stats{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){
+      .pricing-grid{grid-template-columns:1fr}
+      .feat-grid{grid-template-columns:1fr}
+      .eco-grid{grid-template-columns:1fr 1fr}
+      .footer-grid{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .hero h1{font-size:2rem}
+    }
+
+    /* ─── SPINNER ─── */
+    .spinner{width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--void);border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <!-- ═══ NAV ═══ -->
+  <nav>
+    <div class="mx nav-inner">
+      <a href="/" class="nav-brand">
+        <span class="nav-logo grad-text">TLID</span>
+        <span class="nav-badge">Registry</span>
+      </a>
+      <div class="nav-links">
+        <a href="#pricing">Pricing</a>
+        <a href="#features">Features</a>
+        <a href="#ecosystem">Ecosystem</a>
+        <a href="https://dwtl.io" target="_blank" class="nav-cta">Trust Layer ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero mx">
+    <div class="hero-pill">🌐 Blockchain Domain Service</div>
+    <h1><span class="grad-text">Your Identity<br>on Trust Layer</span></h1>
+    <p>Claim your unique <strong>.tlid</strong> domain. Lifetime ownership, no gas fees, no renewal traps. Starting at just <strong>$4/year</strong> — undercutting ENS and Unstoppable Domains.</p>
+
+    <div class="search-wrap">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search your domain..." autocomplete="off" spellcheck="false" maxlength="63">
+        <span class="search-tld">.tlid</span>
+        <button class="search-btn" id="search-btn" onclick="searchDomain()">Search</button>
+      </div>
+    </div>
+
+    <!-- Result Card -->
+    <div class="result glass" id="result-card">
+      <div class="result-header">
+        <div>
+          <div class="result-name" id="result-name">—</div>
+          <div id="result-tier-label" class="result-tier" style="text-align:left;margin:4px 0 0;font-size:11px"></div>
+        </div>
+        <span class="result-status" id="result-status">—</span>
+      </div>
+      <div id="result-body"></div>
+    </div>
+  </div>
+
+  <!-- ═══ STATS ═══ -->
+  <div class="section mx reveal">
+    <div class="stats">
+      <div class="glass stat-card">
+        <span class="stat-val" style="color:var(--accent)" id="stat-domains">—</span>
+        <span class="stat-label">Domains Registered</span>
+      </div>
+      <div class="glass stat-card">
+        <span class="stat-val" style="color:var(--purple)" id="stat-owners">—</span>
+        <span class="stat-label">Unique Owners</span>
+      </div>
+      <div class="glass stat-card">
+        <span class="stat-val" style="color:#fbbf24" id="stat-premium">—</span>
+        <span class="stat-label">Premium Domains</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ PRICING ═══ -->
+  <div class="section mx reveal" id="pricing">
+    <div class="section-head">
+      <h2 class="grad-text">Transparent Pricing</h2>
+      <p>No hidden fees, no gas costs, no renewal traps. Choose yearly rental or own your domain forever.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="glass pricing-card">
+        <span class="pricing-badge reserved">Reserved</span>
+        <div class="pricing-chars">1–2 Characters</div>
+        <div class="pricing-yearly" style="color:var(--text-muted);font-size:1.2rem">Enterprise Only</div>
+        <div class="pricing-lifetime" style="color:var(--text-muted)">Contact for pricing</div>
+        <div class="pricing-compare">Ultra-rare single & double<br>character identities</div>
+      </div>
+      <div class="glass pricing-card">
+        <span class="pricing-badge ultra">Ultra Premium</span>
+        <div class="pricing-chars">3 Characters</div>
+        <div class="pricing-yearly grad-text">$199<span style="font-size:14px;font-weight:500">/yr</span></div>
+        <div class="pricing-lifetime">∞ Own Forever — $2,999</div>
+        <div class="pricing-compare">ENS charges <s>$640/yr</s><br><strong style="color:#6ee7b7">Save 69%</strong></div>
+      </div>
+      <div class="glass pricing-card featured">
+        <span class="pricing-badge premium">Premium</span>
+        <div class="pricing-chars">4 Characters</div>
+        <div class="pricing-yearly grad-text">$79<span style="font-size:14px;font-weight:500">/yr</span></div>
+        <div class="pricing-lifetime">∞ Own Forever — $1,199</div>
+        <div class="pricing-compare">ENS charges <s>$160/yr</s><br><strong style="color:#6ee7b7">Save 50%</strong></div>
+      </div>
+      <div class="glass pricing-card">
+        <span class="pricing-badge standard">Standard+</span>
+        <div class="pricing-chars">5 Characters</div>
+        <div class="pricing-yearly grad-text">$29<span style="font-size:14px;font-weight:500">/yr</span></div>
+        <div class="pricing-lifetime">∞ Own Forever — $449</div>
+        <div class="pricing-compare">Unstoppable charges <s>$20–40 one-time</s><br>We include lifetime option</div>
+      </div>
+      <div class="glass pricing-card">
+        <span class="pricing-badge standard">Standard</span>
+        <div class="pricing-chars">6–10 Characters</div>
+        <div class="pricing-yearly grad-text">$9<span style="font-size:14px;font-weight:500">/yr</span></div>
+        <div class="pricing-lifetime">∞ Own Forever — $149</div>
+        <div class="pricing-compare">Cheaper than most<br>traditional registrars</div>
+      </div>
+      <div class="glass pricing-card">
+        <span class="pricing-badge economy">Economy</span>
+        <div class="pricing-chars">11+ Characters</div>
+        <div class="pricing-yearly grad-text">$4<span style="font-size:14px;font-weight:500">/yr</span></div>
+        <div class="pricing-lifetime">∞ Own Forever — $59</div>
+        <div class="pricing-compare">Lowest entry point in<br>the blockchain domain space</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ FEATURES ═══ -->
+  <div class="section mx reveal" id="features">
+    <div class="section-head">
+      <h2 class="grad-text">Why .tlid?</h2>
+      <p>More than a domain — a permanent digital identity on the Trust Layer blockchain.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="glass feat-card">
+        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,255,212,.12),rgba(0,180,216,.06));border:1px solid rgba(0,255,212,.15)">🔒</div>
+        <h3>Blockchain Verified</h3>
+        <p>Every domain is secured on the Trust Layer with tamper-proof ownership records. No centralized authority can revoke your identity.</p>
+      </div>
+      <div class="glass feat-card">
+        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(138,92,246,.12),rgba(138,92,246,.06));border:1px solid rgba(138,92,246,.15)">🌍</div>
+        <h3>Universal Identity</h3>
+        <p>Link wallets, websites, and social profiles to a single memorable name. One domain, infinite connections across the ecosystem.</p>
+      </div>
+      <div class="glass feat-card">
+        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.06));border:1px solid rgba(251,191,36,.15)">⚡</div>
+        <h3>Instant Transfers</h3>
+        <p>Send and receive tokens using human-readable names instead of complex wallet addresses. yourname.tlid → done.</p>
+      </div>
+      <div class="glass feat-card">
+        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.06));border:1px solid rgba(16,185,129,.15)">∞</div>
+        <h3>Lifetime Ownership</h3>
+        <p>No annual renewal fees eating into your budget. Pay once, own forever. Something ENS can't offer at any price.</p>
+      </div>
+      <div class="glass feat-card">
+        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.06));border:1px solid rgba(239,68,68,.15)">🛡️</div>
+        <h3>Zero Gas Fees</h3>
+        <p>Unlike ENS, registering a .tlid domain doesn't require ETH gas. Pay with card. No crypto wallet required to get started.</p>
+      </div>
+      <div class="glass feat-card">
+        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,180,216,.12),rgba(0,180,216,.06));border:1px solid rgba(0,180,216,.15)">📡</div>
+        <h3>Ecosystem Subdomains</h3>
+        <p>Every Trust Layer app resolves at yourapp.tlid.io. Your .tlid domain becomes your passport to the entire ecosystem.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ ECOSYSTEM ═══ -->
+  <div class="section mx reveal" id="ecosystem">
+    <div class="section-head">
+      <h2 class="grad-text">Your .tlid Resolves Everywhere</h2>
+      <p>One domain, seamless access across the Trust Layer ecosystem.</p>
+    </div>
+    <div class="eco-grid">
+      <div class="glass eco-card" onclick="window.open('https://dwtl.io','_blank')">
+        <span class="eco-icon">🔗</span>
+        <div class="eco-name">Trust Layer</div>
+        <div class="eco-desc">Core blockchain platform</div>
+      </div>
+      <div class="glass eco-card" onclick="window.open('https://signalcast.io','_blank')">
+        <span class="eco-icon">📡</span>
+        <div class="eco-name">SignalCast</div>
+        <div class="eco-desc">Social media automation</div>
+      </div>
+      <div class="glass eco-card" onclick="window.open('https://lumeline.bet','_blank')">
+        <span class="eco-icon">📊</span>
+        <div class="eco-name">LumeLine</div>
+        <div class="eco-desc">Odds intelligence</div>
+      </div>
+      <div class="glass eco-card" onclick="window.open('https://darkwavestudios.io','_blank')">
+        <span class="eco-icon">🎬</span>
+        <div class="eco-name">DarkWave Studios</div>
+        <div class="eco-desc">Creative production</div>
+      </div>
+      <div class="glass eco-card">
+        <span class="eco-icon">🎮</span>
+        <div class="eco-name">TrustGen 3D</div>
+        <div class="eco-desc">AI 3D asset engine</div>
+      </div>
+      <div class="glass eco-card">
+        <span class="eco-icon">💬</span>
+        <div class="eco-name">Signal Chat</div>
+        <div class="eco-desc">Encrypted messaging</div>
+      </div>
+      <div class="glass eco-card">
+        <span class="eco-icon">📖</span>
+        <div class="eco-name">Through the Veil</div>
+        <div class="eco-desc">Interactive fiction</div>
+      </div>
+      <div class="glass eco-card">
+        <span class="eco-icon">🌿</span>
+        <div class="eco-name">Arbora</div>
+        <div class="eco-desc">Wellness platform</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ CTA ═══ -->
+  <div class="cta-section mx reveal">
+    <h2 class="grad-text">Claim Your Identity</h2>
+    <p>The best domains go fast. Secure yours before someone else does.</p>
+    <button class="cta-btn cta-primary" onclick="document.getElementById('search-input').focus();window.scrollTo({top:0,behavior:'smooth'})">🌐 Search Available Domains</button>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="divider"></div>
+  <footer>
+    <div class="mx">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand grad-text">TLID</div>
+          <p class="footer-desc">Premium blockchain domain registry. Part of the Trust Layer ecosystem by DarkWave Studios.</p>
+        </div>
+        <div>
+          <div class="footer-heading">Registry</div>
+          <a href="#" class="footer-link" onclick="document.getElementById('search-input').focus();window.scrollTo({top:0,behavior:'smooth'});return false">Search Domains</a>
+          <a href="#pricing" class="footer-link">Pricing</a>
+          <a href="#features" class="footer-link">Features</a>
+        </div>
+        <div>
+          <div class="footer-heading">Ecosystem</div>
+          <a href="https://dwtl.io" target="_blank" class="footer-link">Trust Layer</a>
+          <a href="https://darkwavestudios.io" target="_blank" class="footer-link">DarkWave Studios</a>
+          <a href="https://signalcast.io" target="_blank" class="footer-link">SignalCast</a>
+        </div>
+        <div>
+          <div class="footer-heading">Legal</div>
+          <a href="https://dwtl.io/terms" target="_blank" class="footer-link">Terms of Service</a>
+          <a href="https://dwtl.io/privacy" target="_blank" class="footer-link">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2026 DarkWave Studios, LLC · All rights reserved</div>
+        <div class="footer-badges">
+          <a href="https://dwtl.io" target="_blank">🛡️ Trust Layer</a>
+          <span style="font-size:9px;color:var(--text-muted);font-family:monospace">v1.0.0</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ═══ API ═══
+    const API_BASE = 'https://dwtl.io';
+
+    // ═══ PRICING DATA ═══
+    const TIERS = {
+      reserved:     { label: 'Reserved',      yearly: null,  lifetime: null },
+      ultra_premium:{ label: 'Ultra Premium',  yearly: 19900, lifetime: 299900 },
+      premium:      { label: 'Premium',        yearly: 7900,  lifetime: 119900 },
+      standard_plus:{ label: 'Standard+',      yearly: 2900,  lifetime: 44900 },
+      standard:     { label: 'Standard',       yearly: 900,   lifetime: 14900 },
+      economy:      { label: 'Economy',        yearly: 400,   lifetime: 5900 },
+    };
+
+    function getTier(name) {
+      const len = name.length;
+      if (len <= 2) return TIERS.reserved;
+      if (len === 3) return TIERS.ultra_premium;
+      if (len === 4) return TIERS.premium;
+      if (len === 5) return TIERS.standard_plus;
+      if (len <= 10) return TIERS.standard;
+      return TIERS.economy;
+    }
+
+    function fmt(cents) { return '$' + (cents / 100).toFixed(cents % 100 === 0 ? 0 : 2); }
+
+    // ═══ SEARCH ═══
+    const inp = document.getElementById('search-input');
+    const btn = document.getElementById('search-btn');
+    const card = document.getElementById('result-card');
+
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') searchDomain(); });
+
+    async function searchDomain() {
+      const raw = inp.value.trim().toLowerCase().replace(/\.tlid$/, '').replace(/[^a-z0-9-]/g, '');
+      if (!raw) return;
+      inp.value = raw;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>';
+
+      try {
+        const res = await fetch(`${API_BASE}/api/domains/search/${encodeURIComponent(raw)}`);
+        if (!res.ok) throw new Error('Search failed');
+        const data = await res.json();
+        showResult(data);
+      } catch (err) {
+        // Fallback: show local tier pricing
+        const tier = getTier(raw);
+        showResult({
+          available: true,
+          name: raw,
+          tld: 'tlid',
+          pricePerYearCents: tier.yearly,
+          priceLifetimeCents: tier.lifetime,
+          tier: tier.label,
+          isReserved: !tier.yearly,
+          isPremium: raw.length <= 4,
+        });
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Search';
+      }
+    }
+
+    function showResult(d) {
+      card.className = 'result glass show ' + (d.available ? 'result-avail' : 'result-taken');
+      document.getElementById('result-name').textContent = d.name + '.' + (d.tld || 'tlid');
+
+      const status = document.getElementById('result-status');
+      status.textContent = d.available ? '✓ Available' : '✗ Taken';
+      status.className = 'result-status ' + (d.available ? 'avail' : 'taken');
+
+      const tierLabel = document.getElementById('result-tier-label');
+      tierLabel.textContent = d.tier ? d.tier + ' tier domain' : '';
+
+      const body = document.getElementById('result-body');
+
+      if (!d.available) {
+        body.innerHTML = `
+          <div style="padding:16px;border-radius:var(--radius-sm);background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.1);text-align:center">
+            <p style="color:#fca5a5;font-size:13px">This domain is already registered.</p>
+          </div>`;
+        return;
+      }
+
+      if (d.isReserved) {
+        body.innerHTML = `
+          <div style="padding:20px;border-radius:var(--radius-sm);background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.1);text-align:center">
+            <p style="color:#fca5a5;font-weight:700;margin-bottom:4px">Reserved Domain</p>
+            <p style="color:var(--text-muted);font-size:12px">1–2 character domains are reserved for enterprise customers.</p>
+          </div>`;
+        return;
+      }
+
+      body.innerHTML = `
+        <div class="result-prices">
+          <div class="result-price-card">
+            <div class="result-price-label">Yearly Rental</div>
+            <div class="result-price-val" style="color:var(--text)">${fmt(d.pricePerYearCents)}<span style="font-size:14px;color:var(--text-muted)">/yr</span></div>
+          </div>
+          <div class="result-price-card highlight">
+            <div class="result-price-label">∞ Own Forever</div>
+            <div class="result-price-val" style="color:var(--accent)">${fmt(d.priceLifetimeCents)}</div>
+          </div>
+        </div>
+        <button class="result-register" onclick="window.open('${API_BASE}/domains#register','_blank')">
+          Register ${d.name}.tlid →
+        </button>
+      `;
+    }
+
+    // ═══ STATS ═══
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API_BASE}/api/domains/stats`);
+        const d = await res.json();
+        animateCount('stat-domains', d.totalDomains || 0);
+        animateCount('stat-owners', d.totalOwners || 0);
+        animateCount('stat-premium', d.premiumCount || 0);
+      } catch {
+        document.getElementById('stat-domains').textContent = '—';
+        document.getElementById('stat-owners').textContent = '—';
+        document.getElementById('stat-premium').textContent = '—';
+      }
+    }
+
+    function animateCount(id, target) {
+      const el = document.getElementById(id);
+      let current = 0;
+      const step = Math.max(1, Math.ceil(target / 40));
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = current.toLocaleString();
+      }, 30);
+    }
+
+    // ═══ SCROLL REVEAL ═══
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ═══ INIT ═══
+    loadStats();
+  </script>
+</body>
+</html>
