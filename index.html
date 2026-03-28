@@ -107,9 +107,12 @@
     .pricing-compare{font-size:10px;color:var(--text-muted);margin-top:12px;line-height:1.6}
     .pricing-compare s{color:rgba(239,68,68,.5)}
 
-    /* ─── FEATURES ─── */
     .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .feat-card{padding:32px 24px}
+    .feat-card{padding:32px 24px;position:relative;overflow:hidden;min-height:280px}
+    .feat-card-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.18;transition:opacity .4s}
+    .feat-card:hover .feat-card-bg{opacity:.28}
+    .feat-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,18,.7) 0%,rgba(3,7,18,.9) 100%)}
+    .feat-card-content{position:relative;z-index:1}
     .feat-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
     .feat-card h3{font-size:1rem;font-weight:800;margin-bottom:8px}
     .feat-card p{font-size:13px;color:var(--text-dim);line-height:1.7}
@@ -304,34 +307,58 @@
     </div>
     <div class="feat-grid">
       <div class="glass feat-card">
-        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,255,212,.12),rgba(0,180,216,.06));border:1px solid rgba(0,255,212,.15)">🔒</div>
-        <h3>Blockchain Verified</h3>
-        <p>Every domain is secured on the Trust Layer with tamper-proof ownership records. No centralized authority can revoke your identity.</p>
+        <div class="feat-card-bg" style="background-image:url('images/blockchain-shield.png')"></div>
+        <div class="feat-card-overlay"></div>
+        <div class="feat-card-content">
+          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,255,212,.12),rgba(0,180,216,.06));border:1px solid rgba(0,255,212,.15)">🔒</div>
+          <h3>Blockchain Verified</h3>
+          <p>Every domain is secured on the Trust Layer with tamper-proof ownership records. No centralized authority can revoke your identity.</p>
+        </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(138,92,246,.12),rgba(138,92,246,.06));border:1px solid rgba(138,92,246,.15)">🌍</div>
-        <h3>Universal Identity</h3>
-        <p>Link wallets, websites, and social profiles to a single memorable name. One domain, infinite connections across the ecosystem.</p>
+        <div class="feat-card-bg" style="background-image:url('images/digital-identity.png')"></div>
+        <div class="feat-card-overlay"></div>
+        <div class="feat-card-content">
+          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(138,92,246,.12),rgba(138,92,246,.06));border:1px solid rgba(138,92,246,.15)">🌍</div>
+          <h3>Universal Identity</h3>
+          <p>Link wallets, websites, and social profiles to a single memorable name. One domain, infinite connections across the ecosystem.</p>
+        </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.06));border:1px solid rgba(251,191,36,.15)">⚡</div>
-        <h3>Instant Transfers</h3>
-        <p>Send and receive tokens using human-readable names instead of complex wallet addresses. yourname.tlid → done.</p>
+        <div class="feat-card-bg" style="background-image:url('images/instant-transfer.png')"></div>
+        <div class="feat-card-overlay"></div>
+        <div class="feat-card-content">
+          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.06));border:1px solid rgba(251,191,36,.15)">⚡</div>
+          <h3>Instant Transfers</h3>
+          <p>Send and receive tokens using human-readable names instead of complex wallet addresses. yourname.tlid → done.</p>
+        </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.06));border:1px solid rgba(16,185,129,.15)">∞</div>
-        <h3>Lifetime Ownership</h3>
-        <p>No annual renewal fees eating into your budget. Pay once, own forever. Something ENS can't offer at any price.</p>
+        <div class="feat-card-bg" style="background-image:url('images/lifetime-ownership.png')"></div>
+        <div class="feat-card-overlay"></div>
+        <div class="feat-card-content">
+          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.06));border:1px solid rgba(16,185,129,.15)">∞</div>
+          <h3>Lifetime Ownership</h3>
+          <p>No annual renewal fees eating into your budget. Pay once, own forever. Something ENS can't offer at any price.</p>
+        </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.06));border:1px solid rgba(239,68,68,.15)">🛡️</div>
-        <h3>Zero Gas Fees</h3>
-        <p>Unlike ENS, registering a .tlid domain doesn't require ETH gas. Pay with card. No crypto wallet required to get started.</p>
+        <div class="feat-card-bg" style="background-image:url('images/zero-gas.png')"></div>
+        <div class="feat-card-overlay"></div>
+        <div class="feat-card-content">
+          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.06));border:1px solid rgba(239,68,68,.15)">🛡️</div>
+          <h3>Zero Gas Fees</h3>
+          <p>Unlike ENS, registering a .tlid domain doesn't require ETH gas. Pay with card. No crypto wallet required to get started.</p>
+        </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,180,216,.12),rgba(0,180,216,.06));border:1px solid rgba(0,180,216,.15)">📡</div>
-        <h3>Ecosystem Subdomains</h3>
-        <p>Every Trust Layer app resolves at yourapp.tlid.io. Your .tlid domain becomes your passport to the entire ecosystem.</p>
+        <div class="feat-card-bg" style="background-image:url('images/ecosystem-network.png')"></div>
+        <div class="feat-card-overlay"></div>
+        <div class="feat-card-content">
+          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,180,216,.12),rgba(0,180,216,.06));border:1px solid rgba(0,180,216,.15)">📡</div>
+          <h3>Ecosystem Subdomains</h3>
+          <p>Every Trust Layer app resolves at yourapp.tlid.io. Your .tlid domain becomes your passport to the entire ecosystem.</p>
+        </div>
       </div>
     </div>
   </div>
