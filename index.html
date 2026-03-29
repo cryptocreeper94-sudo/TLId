@@ -229,16 +229,16 @@
   <div class="section mx reveal">
     <div class="stats">
       <div class="glass stat-card">
-        <span class="stat-val" style="color:var(--accent)" id="stat-domains">—</span>
-        <span class="stat-label">Domains Registered</span>
+        <span class="stat-val" style="color:var(--accent)">100%</span>
+        <span class="stat-label">Gas-Free Minting</span>
       </div>
       <div class="glass stat-card">
-        <span class="stat-val" style="color:var(--purple)" id="stat-owners">—</span>
-        <span class="stat-label">Unique Owners</span>
+        <span class="stat-val" style="color:var(--purple)">∞</span>
+        <span class="stat-label">Lifetime Ownership</span>
       </div>
       <div class="glass stat-card">
-        <span class="stat-val" style="color:#fbbf24" id="stat-premium">—</span>
-        <span class="stat-label">Premium Domains</span>
+        <span class="stat-val" style="color:#fbbf24">8+</span>
+        <span class="stat-label">Ecosystem Apps</span>
       </div>
     </div>
   </div>
@@ -573,40 +573,16 @@
       `;
     }
 
-    // ═══ STATS ═══
-    async function loadStats() {
-      try {
-        const res = await fetch(`${API_BASE}/api/domains/stats`);
-        const d = await res.json();
-        animateCount('stat-domains', d.totalDomains || 0);
-        animateCount('stat-owners', d.totalOwners || 0);
-        animateCount('stat-premium', d.premiumCount || 0);
-      } catch {
-        document.getElementById('stat-domains').textContent = '—';
-        document.getElementById('stat-owners').textContent = '—';
-        document.getElementById('stat-premium').textContent = '—';
-      }
-    }
+    // ═══ STATS (Replaced by Marketing text) ═══
 
-    function animateCount(id, target) {
-      const el = document.getElementById(id);
-      let current = 0;
-      const step = Math.max(1, Math.ceil(target / 40));
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) { current = target; clearInterval(timer); }
-        el.textContent = current.toLocaleString();
-      }, 30);
-    }
-
-    // ═══ SCROLL REVEAL ═══
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // ═══ INIT ═══
-    loadStats();
+// stats removed
+
   </script>
 </body>
 </html>
