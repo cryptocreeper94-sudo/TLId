@@ -50,8 +50,16 @@
     .nav-cta:hover{background:rgba(0,255,212,.15)}
 
     /* ─── HERO ─── */
-    .hero{padding:160px 0 80px;text-align:center}
-    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:999px;background:linear-gradient(135deg,rgba(0,255,212,.08),rgba(138,92,246,.08));border:1px solid rgba(0,255,212,.15);font-size:12px;font-weight:600;color:var(--accent);margin-bottom:24px}
+    .hero{padding:220px 0 120px;text-align:center;position:relative;overflow:hidden}
+    @keyframes kenburns{0%{transform:scale(1.0);opacity:0}5%{opacity:0.8}25%{opacity:0.8}30%{opacity:0}100%{transform:scale(1.15);opacity:0}}
+    .hero-bg{position:absolute;inset:0;z-index:-2;overflow:hidden}
+    .hero-slide{position:absolute;inset:-5%;width:110%;height:110%;background-size:cover;background-position:center;opacity:0;animation:kenburns 24s infinite linear}
+    .hero-slide:nth-child(1){animation-delay:0s}
+    .hero-slide:nth-child(2){animation-delay:8s}
+    .hero-slide:nth-child(3){animation-delay:16s}
+    .hero-overlay{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(3,7,18,0.78) 0%,rgba(3,7,18,1) 100%)}
+    .hero-content{position:relative;z-index:2}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:999px;background:linear-gradient(135deg,rgba(0,255,212,.08),rgba(138,92,246,.08));border:1px solid rgba(0,255,212,.15);font-size:12px;font-weight:600;color:var(--accent);margin-bottom:24px;backdrop-filter:blur(8px)}
     .hero h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.1;margin-bottom:16px}
     .hero p{font-size:1.1rem;color:var(--text-dim);max-width:600px;margin:0 auto 40px;line-height:1.7}
 
@@ -107,23 +115,23 @@
     .pricing-compare{font-size:10px;color:var(--text-muted);margin-top:12px;line-height:1.6}
     .pricing-compare s{color:rgba(239,68,68,.5)}
 
-    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .feat-card{padding:32px 24px;position:relative;overflow:hidden;min-height:280px}
-    .feat-card-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.18;transition:opacity .4s}
-    .feat-card:hover .feat-card-bg{opacity:.28}
-    .feat-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,18,.7) 0%,rgba(3,7,18,.9) 100%)}
-    .feat-card-content{position:relative;z-index:1}
-    .feat-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
-    .feat-card h3{font-size:1rem;font-weight:800;margin-bottom:8px}
-    .feat-card p{font-size:13px;color:var(--text-dim);line-height:1.7}
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .feat-card{position:relative;border-radius:16px;overflow:hidden;min-height:340px;cursor:pointer;border:1px solid rgba(255,255,255,0.05)}
+    .feat-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease, filter 0.6s ease;filter:brightness(0.65)}
+    .feat-card:hover img{transform:scale(1.06);filter:brightness(0.85)}
+    .feat-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,7,18,0.98) 0%,rgba(3,7,18,0.1) 100%);z-index:1;pointer-events:none}
+    .feat-card-content{position:absolute;bottom:0;left:0;right:0;padding:28px;z-index:2;pointer-events:none}
+    .feat-card h3{font-size:1.15rem;font-weight:800;margin-bottom:8px;color:#fff}
+    .feat-card p{font-size:13px;color:var(--text-secondary);line-height:1.6;margin:0}
 
     /* ─── ECOSYSTEM ─── */
-    .eco-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-    .eco-card{padding:20px;text-align:center;cursor:pointer}
-    .eco-card:hover{transform:translateY(-2px)}
-    .eco-icon{font-size:28px;margin-bottom:8px;display:block}
-    .eco-name{font-size:12px;font-weight:700;margin-bottom:2px}
-    .eco-desc{font-size:10px;color:var(--text-muted)}
+    .eco-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .eco-card{position:relative;border-radius:14px;overflow:hidden;padding:32px 20px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.05)}
+    .eco-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 0.4s ease;filter:brightness(0.5)}
+    .eco-card:hover .eco-bg{transform:scale(1.05);filter:brightness(0.75)}
+    .eco-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,18,0.6) 0%,rgba(3,7,18,0.95) 100%);z-index:-1}
+    .eco-name{font-size:14px;font-weight:800;margin-bottom:4px;color:#fff}
+    .eco-desc{font-size:12px;color:var(--text-muted);position:relative;z-index:2}
 
     /* ─── CTA ─── */
     .cta-section{text-align:center;padding:100px 0}
@@ -199,10 +207,17 @@
   </nav>
 
   <!-- ═══ HERO ═══ -->
-  <div class="hero mx">
-    <div class="hero-pill">🌐 Blockchain Domain Service</div>
-    <h1><span class="grad-text">Your Identity<br>on Trust Layer</span></h1>
-    <p>Claim your unique <strong>.tlid</strong> domain. Lifetime ownership, no gas fees, no renewal traps. Starting at just <strong>$4/year</strong> — undercutting ENS and Unstoppable Domains.</p>
+  <div class="hero">
+    <div class="hero-bg">
+      <div class="hero-slide" style="background-image: url('images/hero1.png')"></div>
+      <div class="hero-slide" style="background-image: url('images/hero2.png')"></div>
+      <div class="hero-slide" style="background-image: url('images/hero3.png')"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content mx">
+      <div class="hero-pill">🌐 Blockchain Domain Service</div>
+      <h1><span class="grad-text">Your Identity<br>on Trust Layer</span></h1>
+      <p>Claim your unique <strong>.tlid</strong> domain. Lifetime ownership, no gas fees, no renewal traps. Starting at just <strong>$4/year</strong> — undercutting ENS and Unstoppable Domains.</p>
 
     <div class="search-wrap">
       <div class="search-bar">
@@ -223,6 +238,7 @@
       </div>
       <div id="result-body"></div>
     </div>
+    </div> <!-- Close hero-content -->
   </div>
 
   <!-- ═══ STATS ═══ -->
@@ -307,55 +323,49 @@
     </div>
     <div class="feat-grid">
       <div class="glass feat-card">
-        <div class="feat-card-bg" style="background-image:url('images/blockchain-shield.png')"></div>
+        <img src="images/blockchain-shield.png" alt="Blockchain Verified">
         <div class="feat-card-overlay"></div>
         <div class="feat-card-content">
-          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,255,212,.12),rgba(0,180,216,.06));border:1px solid rgba(0,255,212,.15)">🔒</div>
           <h3>Blockchain Verified</h3>
           <p>Every domain is secured on the Trust Layer with tamper-proof ownership records. No centralized authority can revoke your identity.</p>
         </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-card-bg" style="background-image:url('images/digital-identity.png')"></div>
+        <img src="images/digital-identity.png" alt="Universal Identity">
         <div class="feat-card-overlay"></div>
         <div class="feat-card-content">
-          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(138,92,246,.12),rgba(138,92,246,.06));border:1px solid rgba(138,92,246,.15)">🌍</div>
           <h3>Universal Identity</h3>
           <p>Link wallets, websites, and social profiles to a single memorable name. One domain, infinite connections across the ecosystem.</p>
         </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-card-bg" style="background-image:url('images/instant-transfer.png')"></div>
+        <img src="images/instant-transfer.png" alt="Instant Transfers">
         <div class="feat-card-overlay"></div>
         <div class="feat-card-content">
-          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.06));border:1px solid rgba(251,191,36,.15)">⚡</div>
           <h3>Instant Transfers</h3>
           <p>Send and receive tokens using human-readable names instead of complex wallet addresses. yourname.tlid → done.</p>
         </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-card-bg" style="background-image:url('images/lifetime-ownership.png')"></div>
+        <img src="images/lifetime-ownership.png" alt="Lifetime Ownership">
         <div class="feat-card-overlay"></div>
         <div class="feat-card-content">
-          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.06));border:1px solid rgba(16,185,129,.15)">∞</div>
           <h3>Lifetime Ownership</h3>
           <p>No annual renewal fees eating into your budget. Pay once, own forever. Something ENS can't offer at any price.</p>
         </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-card-bg" style="background-image:url('images/zero-gas.png')"></div>
+        <img src="images/zero-gas.png" alt="Zero Gas Fees">
         <div class="feat-card-overlay"></div>
         <div class="feat-card-content">
-          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.06));border:1px solid rgba(239,68,68,.15)">🛡️</div>
           <h3>Zero Gas Fees</h3>
           <p>Unlike ENS, registering a .tlid domain doesn't require ETH gas. Pay with card. No crypto wallet required to get started.</p>
         </div>
       </div>
       <div class="glass feat-card">
-        <div class="feat-card-bg" style="background-image:url('images/ecosystem-network.png')"></div>
+        <img src="images/ecosystem-network.png" alt="Ecosystem Subdomains">
         <div class="feat-card-overlay"></div>
         <div class="feat-card-content">
-          <div class="feat-icon" style="background:linear-gradient(135deg,rgba(0,180,216,.12),rgba(0,180,216,.06));border:1px solid rgba(0,180,216,.15)">📡</div>
           <h3>Ecosystem Subdomains</h3>
           <p>Every Trust Layer app resolves at yourapp.tlid.io. Your .tlid domain becomes your passport to the entire ecosystem.</p>
         </div>
@@ -373,42 +383,50 @@
     </div>
     <div class="eco-grid">
       <div class="glass eco-card" onclick="window.open('https://dwtl.io','_blank')">
-        <span class="eco-icon">🔗</span>
+        <img class="eco-bg" src="images/eco1.png" alt="Trust Layer">
+        <div class="eco-overlay"></div>
         <div class="eco-name">Trust Layer</div>
         <div class="eco-desc">Core blockchain platform</div>
       </div>
       <div class="glass eco-card" onclick="window.open('https://signalcast.io','_blank')">
-        <span class="eco-icon">📡</span>
+        <img class="eco-bg" src="images/eco2.png" alt="SignalCast">
+        <div class="eco-overlay"></div>
         <div class="eco-name">SignalCast</div>
         <div class="eco-desc">Social media automation</div>
       </div>
       <div class="glass eco-card" onclick="window.open('https://lumeline.bet','_blank')">
-        <span class="eco-icon">📊</span>
+        <img class="eco-bg" src="images/eco3.png" alt="LumeLine">
+        <div class="eco-overlay"></div>
         <div class="eco-name">LumeLine</div>
         <div class="eco-desc">Odds intelligence</div>
       </div>
       <div class="glass eco-card" onclick="window.open('https://darkwavestudios.io','_blank')">
-        <span class="eco-icon">🎬</span>
+        <img class="eco-bg" src="images/eco4.png" alt="DarkWave Studios">
+        <div class="eco-overlay"></div>
         <div class="eco-name">DarkWave Studios</div>
         <div class="eco-desc">Creative production</div>
       </div>
       <div class="glass eco-card">
-        <span class="eco-icon">🎮</span>
+        <img class="eco-bg" src="images/eco1.png" alt="TrustGen 3D">
+        <div class="eco-overlay"></div>
         <div class="eco-name">TrustGen 3D</div>
         <div class="eco-desc">AI 3D asset engine</div>
       </div>
       <div class="glass eco-card">
-        <span class="eco-icon">💬</span>
+        <img class="eco-bg" src="images/eco2.png" alt="Signal Chat">
+        <div class="eco-overlay"></div>
         <div class="eco-name">Signal Chat</div>
         <div class="eco-desc">Encrypted messaging</div>
       </div>
       <div class="glass eco-card">
-        <span class="eco-icon">📖</span>
+        <img class="eco-bg" src="images/eco3.png" alt="Through the Veil">
+        <div class="eco-overlay"></div>
         <div class="eco-name">Through the Veil</div>
         <div class="eco-desc">Interactive fiction</div>
       </div>
       <div class="glass eco-card">
-        <span class="eco-icon">🌿</span>
+        <img class="eco-bg" src="images/eco4.png" alt="Arbora">
+        <div class="eco-overlay"></div>
         <div class="eco-name">Arbora</div>
         <div class="eco-desc">Wellness platform</div>
       </div>
