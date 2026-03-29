@@ -122,7 +122,28 @@
     .feat-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,7,18,0.98) 0%,rgba(3,7,18,0.1) 100%);z-index:1;pointer-events:none}
     .feat-card-content{position:absolute;bottom:0;left:0;right:0;padding:28px;z-index:2;pointer-events:none}
     .feat-card h3{font-size:1.15rem;font-weight:800;margin-bottom:8px;color:#fff}
-    .feat-card p{font-size:13px;color:var(--text-secondary);line-height:1.6;margin:0}
+    .feat-card p{font-size:13px;color:var(--text-dim);line-height:1.6;margin:0}
+    .feat-card-hint{position:absolute;top:16px;right:16px;z-index:3;font-size:10px;font-weight:700;color:var(--accent);background:rgba(0,255,212,.1);border:1px solid rgba(0,255,212,.2);padding:4px 12px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none;text-transform:uppercase;letter-spacing:.08em;backdrop-filter:blur(8px)}
+    .feat-card:hover .feat-card-hint{opacity:1}
+
+    /* ─── MODAL ─── */
+    .modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}
+    .modal-backdrop.open{opacity:1;visibility:visible}
+    .modal-card{position:relative;background:linear-gradient(145deg,rgba(12,18,36,.98),rgba(3,7,18,.98));border:1px solid rgba(0,255,212,.12);border-radius:20px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(20px) scale(.96);transition:transform .35s cubic-bezier(.16,1,.3,1);box-shadow:0 0 80px rgba(0,255,212,.06),0 24px 48px rgba(0,0,0,.5)}
+    .modal-backdrop.open .modal-card{transform:translateY(0) scale(1)}
+    .modal-img{width:100%;height:220px;object-fit:cover;border-radius:20px 20px 0 0;filter:brightness(0.7)}
+    .modal-body{padding:32px}
+    .modal-title{font-size:1.5rem;font-weight:900;margin-bottom:6px;color:#fff}
+    .modal-subtitle{font-size:12px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px}
+    .modal-desc{font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px}
+    .modal-highlights{list-style:none;padding:0;margin:0 0 28px}
+    .modal-highlights li{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--text-dim);line-height:1.6}
+    .modal-highlights li:last-child{border-bottom:none}
+    .modal-highlights .hl-icon{flex-shrink:0;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--accent);background:rgba(0,255,212,.08);border:1px solid rgba(0,255,212,.12)}
+    .modal-cta{display:block;width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;font-family:inherit;text-align:center}
+    .modal-cta:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,255,212,.2)}
+    .modal-close{position:absolute;top:16px;right:16px;z-index:5;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.5);backdrop-filter:blur(8px);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .modal-close:hover{background:rgba(239,68,68,.3);border-color:rgba(239,68,68,.3)}
 
     /* ─── ECOSYSTEM ─── */
     .eco-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -172,14 +193,22 @@
       .eco-grid{grid-template-columns:repeat(2,1fr)}
       .footer-grid{grid-template-columns:1fr 1fr}
       .stats{grid-template-columns:1fr}
+      .modal-card{max-width:100%}
+      .modal-img{height:180px}
     }
     @media(max-width:600px){
       .pricing-grid{grid-template-columns:1fr}
       .feat-grid{grid-template-columns:1fr}
+      .feat-card{min-height:260px}
+      .feat-card-hint{opacity:1}
       .eco-grid{grid-template-columns:1fr 1fr}
       .footer-grid{grid-template-columns:1fr}
       .nav-links{display:none}
       .hero h1{font-size:2rem}
+      .modal-backdrop{padding:12px}
+      .modal-body{padding:20px}
+      .modal-title{font-size:1.25rem}
+      .modal-img{height:140px}
     }
 
     /* ─── SPINNER ─── */
@@ -322,49 +351,55 @@
       <p>More than a domain — a permanent digital identity on the Trust Layer blockchain.</p>
     </div>
     <div class="feat-grid">
-      <div class="glass feat-card">
+      <div class="glass feat-card" data-feat="blockchain">
         <img src="images/blockchain-shield.png" alt="Blockchain Verified">
         <div class="feat-card-overlay"></div>
+        <span class="feat-card-hint">Tap to explore</span>
         <div class="feat-card-content">
           <h3>Blockchain Verified</h3>
           <p>Every domain is secured on the Trust Layer with tamper-proof ownership records. No centralized authority can revoke your identity.</p>
         </div>
       </div>
-      <div class="glass feat-card">
+      <div class="glass feat-card" data-feat="identity">
         <img src="images/digital-identity.png" alt="Universal Identity">
         <div class="feat-card-overlay"></div>
+        <span class="feat-card-hint">Tap to explore</span>
         <div class="feat-card-content">
           <h3>Universal Identity</h3>
           <p>Link wallets, websites, and social profiles to a single memorable name. One domain, infinite connections across the ecosystem.</p>
         </div>
       </div>
-      <div class="glass feat-card">
+      <div class="glass feat-card" data-feat="transfers">
         <img src="images/instant-transfer.png" alt="Instant Transfers">
         <div class="feat-card-overlay"></div>
+        <span class="feat-card-hint">Tap to explore</span>
         <div class="feat-card-content">
           <h3>Instant Transfers</h3>
           <p>Send and receive tokens using human-readable names instead of complex wallet addresses. yourname.tlid → done.</p>
         </div>
       </div>
-      <div class="glass feat-card">
+      <div class="glass feat-card" data-feat="lifetime">
         <img src="images/lifetime-ownership.png" alt="Lifetime Ownership">
         <div class="feat-card-overlay"></div>
+        <span class="feat-card-hint">Tap to explore</span>
         <div class="feat-card-content">
           <h3>Lifetime Ownership</h3>
           <p>No annual renewal fees eating into your budget. Pay once, own forever. Something ENS can't offer at any price.</p>
         </div>
       </div>
-      <div class="glass feat-card">
+      <div class="glass feat-card" data-feat="zerogas">
         <img src="images/zero-gas.png" alt="Zero Gas Fees">
         <div class="feat-card-overlay"></div>
+        <span class="feat-card-hint">Tap to explore</span>
         <div class="feat-card-content">
           <h3>Zero Gas Fees</h3>
           <p>Unlike ENS, registering a .tlid domain doesn't require ETH gas. Pay with card. No crypto wallet required to get started.</p>
         </div>
       </div>
-      <div class="glass feat-card">
+      <div class="glass feat-card" data-feat="ecosystem">
         <img src="images/ecosystem-network.png" alt="Ecosystem Subdomains">
         <div class="feat-card-overlay"></div>
+        <span class="feat-card-hint">Tap to explore</span>
         <div class="feat-card-content">
           <h3>Ecosystem Subdomains</h3>
           <p>Every Trust Layer app resolves at yourapp.tlid.io. Your .tlid domain becomes your passport to the entire ecosystem.</p>
@@ -435,11 +470,26 @@
 
   <div class="divider"></div>
 
-  <!-- ═══ CTA ═══ -->
+  <!-- ═══ FEATURE DETAIL MODAL ═══ -->
+  <div class="modal-backdrop" id="feat-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeFeatModal()" aria-label="Close">&times;</button>
+      <img class="modal-img" id="modal-img" src="" alt="">
+      <div class="modal-body">
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-subtitle" id="modal-subtitle"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <ul class="modal-highlights" id="modal-highlights"></ul>
+        <button class="modal-cta" onclick="closeFeatModal();document.getElementById('search-input').focus();window.scrollTo({top:0,behavior:'smooth'})">Search Your .tlid Domain</button>
+      </div>
+    </div>
+  </div>
+
+
   <div class="cta-section mx reveal">
     <h2 class="grad-text">Claim Your Identity</h2>
     <p>The best domains go fast. Secure yours before someone else does.</p>
-    <button class="cta-btn cta-primary" onclick="document.getElementById('search-input').focus();window.scrollTo({top:0,behavior:'smooth'})">🌐 Search Available Domains</button>
+    <button class="cta-btn cta-primary" onclick="document.getElementById('search-input').focus();window.scrollTo({top:0,behavior:'smooth'})">Search Available Domains</button>
   </div>
 
   <!-- ═══ FOOTER ═══ -->
@@ -591,15 +641,122 @@
       `;
     }
 
-    // ═══ STATS (Replaced by Marketing text) ═══
+    // ═══ FEATURE MODAL ═══
+    const FEAT_DATA = {
+      blockchain: {
+        title: 'Blockchain Verified',
+        subtitle: 'Immutable Ownership Protocol',
+        img: 'images/blockchain-shield.png',
+        desc: 'Every .tlid domain is registered directly on the Trust Layer blockchain, creating an immutable, cryptographically signed record of ownership that no centralized authority can alter, revoke, or censor.',
+        highlights: [
+          { icon: '→', text: 'Tamper-proof ownership records anchored on-chain with SHA-256 verification' },
+          { icon: '→', text: 'No ICANN or centralized registrar can seize or suspend your identity' },
+          { icon: '→', text: 'Full audit trail visible on the Trust Layer explorer for maximum transparency' },
+          { icon: '→', text: 'Compatible with decentralized DNS resolution across Web3 browsers' }
+        ]
+      },
+      identity: {
+        title: 'Universal Identity',
+        subtitle: 'One Name. Infinite Connections.',
+        img: 'images/digital-identity.png',
+        desc: 'Your .tlid domain becomes a universal identity layer — linking crypto wallets, websites, social profiles, and ecosystem apps under a single, human-readable name that works everywhere.',
+        highlights: [
+          { icon: '→', text: 'Attach unlimited wallet addresses across multiple chains to one identity' },
+          { icon: '→', text: 'Map your custom website or portfolio directly to yourname.tlid' },
+          { icon: '→', text: 'Integrated social profile resolution — link Twitter, GitHub, Discord, and more' },
+          { icon: '→', text: 'Works as your login credential across all Trust Layer ecosystem apps' }
+        ]
+      },
+      transfers: {
+        title: 'Instant Transfers',
+        subtitle: 'Human-Readable Payments',
+        img: 'images/instant-transfer.png',
+        desc: 'Stop copying 42-character hex addresses and praying you got them right. With .tlid, you just type a name. Funds are routed instantly via the Trust Layer to the correct wallet — no errors, no risk.',
+        highlights: [
+          { icon: '→', text: 'Send tokens to alex.tlid instead of 0x7a3b…f91c — zero address errors' },
+          { icon: '→', text: 'Multi-chain routing resolves to the correct wallet per blockchain automatically' },
+          { icon: '→', text: 'Transaction confirmation with visual identity verification before send' },
+          { icon: '→', text: 'QR-code generation built-in for in-person and mobile payment flows' }
+        ]
+      },
+      lifetime: {
+        title: 'Lifetime Ownership',
+        subtitle: 'Pay Once. Own Forever.',
+        img: 'images/lifetime-ownership.png',
+        desc: 'Tired of annual renewal fees? With .tlid, you can purchase lifetime ownership of your domain with a single payment. No hidden costs, no expiration date, no renewal traps — ever.',
+        highlights: [
+          { icon: '→', text: 'One-time payment permanently registers your domain on-chain' },
+          { icon: '→', text: 'No annual renewals, no auto-billing, no surprise charges' },
+          { icon: '→', text: 'ENS requires yearly ETH gas renewals — we do not' },
+          { icon: '→', text: 'Transferable asset — sell, gift, or bequeath your domain like any NFT' }
+        ]
+      },
+      zerogas: {
+        title: 'Zero Gas Fees',
+        subtitle: 'No Crypto Wallet Required',
+        img: 'images/zero-gas.png',
+        desc: 'Unlike ENS which requires ETH and unpredictable gas fees just to register, .tlid domains are minted gas-free. Pay with a credit card, Apple Pay, or Google Pay — no MetaMask popup required.',
+        highlights: [
+          { icon: '→', text: 'Zero blockchain transaction fees for registration or transfer' },
+          { icon: '→', text: 'Pay with Visa, Mastercard, Apple Pay, or Google Pay at checkout' },
+          { icon: '→', text: 'No crypto wallet needed to get started — perfect for Web2 users' },
+          { icon: '→', text: 'ENS gas can cost $20-80 on congested days — TLID is always free' }
+        ]
+      },
+      ecosystem: {
+        title: 'Ecosystem Subdomains',
+        subtitle: 'Your Passport to Trust Layer',
+        img: 'images/ecosystem-network.png',
+        desc: 'Every Trust Layer app is accessible at app.tlid.io. Your .tlid domain becomes your single sign-on identity across the entire ecosystem — from Signal Chat to DarkWave Studios to TrustGen 3D.',
+        highlights: [
+          { icon: '→', text: 'Access 8+ ecosystem apps with one unified identity' },
+          { icon: '→', text: 'Automatic subdomain routing — signalcast.tlid.io, academy.tlid.io, etc.' },
+          { icon: '→', text: 'Single sign-on (SSO) authentication across all Trust Layer platforms' },
+          { icon: '→', text: 'Future apps automatically resolve under the .tlid.io namespace' }
+        ]
+      }
+    };
 
+    const modalBackdrop = document.getElementById('feat-modal');
+    const modalCard = modalBackdrop.querySelector('.modal-card');
+
+    function openFeatModal(key) {
+      const d = FEAT_DATA[key];
+      if (!d) return;
+      document.getElementById('modal-img').src = d.img;
+      document.getElementById('modal-img').alt = d.title;
+      document.getElementById('modal-title').textContent = d.title;
+      document.getElementById('modal-subtitle').textContent = d.subtitle;
+      document.getElementById('modal-desc').textContent = d.desc;
+      const list = document.getElementById('modal-highlights');
+      list.innerHTML = d.highlights.map(h =>
+        `<li><span class="hl-icon">${h.icon}</span><span>${h.text}</span></li>`
+      ).join('');
+      modalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFeatModal() {
+      modalBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) closeFeatModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFeatModal();
+    });
+
+    document.querySelectorAll('.feat-card[data-feat]').forEach(card => {
+      card.addEventListener('click', () => openFeatModal(card.dataset.feat));
+    });
+
+    // ═══ SCROLL REVEAL ═══
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // ═══ INIT ═══
-// stats removed
 
   </script>
 </body>
