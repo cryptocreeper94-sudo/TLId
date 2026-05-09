@@ -268,6 +268,27 @@
     .reveal-delay-2{transition-delay:.2s}
     .reveal-delay-3{transition-delay:.3s}
 
+    /* ─── LAUNCH BANNER ─── */
+    .launch-banner{position:relative;z-index:99;background:linear-gradient(90deg,rgba(0,255,212,.08),rgba(138,92,246,.08),rgba(0,255,212,.08));border-bottom:1px solid rgba(0,255,212,.15);padding:0;overflow:hidden}
+    .launch-banner::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(0,255,212,.04) 50%,transparent 100%);animation:shimmer 3s ease-in-out infinite}
+    @keyframes shimmer{0%,100%{opacity:0}50%{opacity:1}}
+    .launch-inner{display:flex;align-items:center;justify-content:center;gap:24px;padding:12px 24px;flex-wrap:wrap}
+    .launch-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);white-space:nowrap}
+    .launch-countdown{display:flex;align-items:center;gap:8px}
+    .countdown-block{display:flex;flex-direction:column;align-items:center;min-width:44px}
+    .countdown-num{font-size:1.4rem;font-weight:900;color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1;background:rgba(0,255,212,.06);border:1px solid rgba(0,255,212,.12);border-radius:8px;padding:6px 10px;min-width:44px;text-align:center}
+    .countdown-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;margin-top:4px;font-weight:600}
+    .countdown-sep{font-size:1.2rem;font-weight:900;color:var(--accent);margin-top:-8px;opacity:.5}
+    .launch-divider{width:1px;height:32px;background:rgba(255,255,255,.08)}
+    .launch-capture{display:flex;gap:8px;align-items:center}
+    .launch-input{background:rgba(255,255,255,.04);border:1px solid rgba(0,255,212,.15);border-radius:8px;padding:7px 14px;font-size:12px;color:var(--text);font-family:inherit;outline:none;width:200px;transition:all .2s}
+    .launch-input:focus{border-color:var(--accent);box-shadow:0 0 16px rgba(0,255,212,.1)}
+    .launch-input::placeholder{color:var(--text-muted)}
+    .launch-submit{padding:7px 16px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:#000;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+    .launch-submit:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,255,212,.25)}
+    .launch-submit.done{background:rgba(16,185,129,.2);color:#6ee7b7;border:1px solid rgba(16,185,129,.3);pointer-events:none}
+    @media(max-width:640px){.launch-divider{display:none}.launch-input{width:150px}.launch-inner{gap:12px;padding:10px 16px}}
+
     /* ─── SPINNER ─── */
     .spinner{width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle}
     @keyframes spin{to{transform:rotate(360deg)}}
@@ -372,6 +393,27 @@
     <a href="#ecosystem" class="mobile-link">Ecosystem</a>
     <a href="#how" class="mobile-link">How It Works</a>
     <a href="https://dwtl.io" target="_blank" class="nav-cta">Trust Layer ↗</a>
+  </div>
+
+  <!-- ═══ LAUNCH COUNTDOWN BANNER ═══ -->
+  <div class="launch-banner" id="launch-banner">
+    <div class="launch-inner mx">
+      <span class="launch-label">🚀 Full ecosystem launch</span>
+      <div class="launch-countdown">
+        <div class="countdown-block"><span class="countdown-num" id="cd-days">--</span><span class="countdown-label">Days</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-block"><span class="countdown-num" id="cd-hours">--</span><span class="countdown-label">Hours</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-block"><span class="countdown-num" id="cd-mins">--</span><span class="countdown-label">Mins</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-block"><span class="countdown-num" id="cd-secs">--</span><span class="countdown-label">Secs</span></div>
+      </div>
+      <div class="launch-divider"></div>
+      <div class="launch-capture">
+        <input type="email" class="launch-input" id="launch-email" placeholder="your@email.com" autocomplete="email">
+        <button class="launch-submit" id="launch-submit" onclick="submitLaunchEmail()">Notify Me</button>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ HERO ═══ -->
@@ -1235,6 +1277,58 @@
         if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(injectShield,1000);});
         else setTimeout(injectShield,1000);
       })();
+    </script>
+
+    <script>
+      // ── Launch Countdown ──
+      (function() {
+        var launch = new Date('2026-05-22T09:00:00-05:00').getTime();
+        function tick() {
+          var now = Date.now();
+          var diff = launch - now;
+          if (diff <= 0) {
+            document.getElementById('launch-banner').innerHTML = '<div class="launch-inner mx"><span class="launch-label" style="font-size:14px;letter-spacing:.05em">🎉 The ecosystem is live — explore now</span><a href="https://axiom42.com" target="_blank" style="padding:7px 18px;border-radius:8px;border:none;background:linear-gradient(135deg,#00ffd4,#00b4d8);color:#000;font-size:11px;font-weight:800;text-decoration:none;">Visit Axiom →</a></div>';
+            return;
+          }
+          var d = Math.floor(diff / 86400000);
+          var h = Math.floor((diff % 86400000) / 3600000);
+          var m = Math.floor((diff % 3600000) / 60000);
+          var s = Math.floor((diff % 60000) / 1000);
+          var pad = function(n){return n < 10 ? '0'+n : ''+n;};
+          document.getElementById('cd-days').textContent = pad(d);
+          document.getElementById('cd-hours').textContent = pad(h);
+          document.getElementById('cd-mins').textContent = pad(m);
+          document.getElementById('cd-secs').textContent = pad(s);
+        }
+        tick();
+        setInterval(tick, 1000);
+      })();
+
+      // ── Email Capture ──
+      function submitLaunchEmail() {
+        var input = document.getElementById('launch-email');
+        var btn = document.getElementById('launch-submit');
+        var email = input.value.trim();
+        if (!email || !email.includes('@')) {
+          input.style.borderColor = 'rgba(239,68,68,.5)';
+          setTimeout(function(){ input.style.borderColor = ''; }, 1200);
+          return;
+        }
+        // Store locally + send to DDA endpoint
+        try {
+          var list = JSON.parse(localStorage.getItem('dw_launch_list') || '[]');
+          if (!list.includes(email)) { list.push(email); localStorage.setItem('dw_launch_list', JSON.stringify(list)); }
+        } catch(e) {}
+        fetch('https://axiom42.com/api/sms/optin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'Launch Subscriber', phone: 'email-only', email: email, consent: true, consentTimestamp: new Date().toISOString(), consentSource: 'tlid_launch_banner' })
+        }).catch(function(){});
+        btn.textContent = '✓ You\'re on the list';
+        btn.classList.add('done');
+        input.value = '';
+      }
+      document.getElementById('launch-email').addEventListener('keydown', function(e){ if(e.key==='Enter') submitLaunchEmail(); });
     </script>
   </body>
 </html>
